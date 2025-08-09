@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { createRooms } from "@/services/RoomService";
+import { createRooms, joinChatApi } from "@/services/RoomService";
 import useChatContext from "@/context/ChatContext";
 import { useRouter } from "next/navigation";
 
@@ -13,8 +13,15 @@ const JoinCreateChat = () => {
     userName: "",
   });
 
-const {roomId , userName , connected ,setRoomId , setCurrentUser , setConnected} = useChatContext();  
-const router = useRouter();
+  const {
+    roomId,
+    userName,
+    connected,
+    setRoomId,
+    setCurrentUser,
+    setConnected,
+  } = useChatContext();
+  const router = useRouter();
 
   function handleFormInputChange(event) {
     setDetail({
@@ -31,32 +38,50 @@ const router = useRouter();
     return true;
   }
 
-  function joinChat() {
+  async function joinChat() {
     if (validateForm()) {
       // API call to join the chat room
+
+      try {
+        const response = await joinChatApi(detail.roomId);
+        console.log(response);
+        toast.success("Room joined successfully !!");
+
+        setCurrentUser(detail.userName);
+        setRoomId(response.roomId);
+        setConnected(true);
+
+        router.push("/chat");
+      } catch (e) {
+        console.log(e);
+        if (e.status == 400) {
+          toast.error(e.response.data);
+        } else {
+          toast.error("Error !!");
+        }
+      }
     }
   }
 
   async function createRoom() {
     if (validateForm()) {
       // API call to create the room
-      try{
-        const response = await createRooms(detail.roomId)
-        console.log(response)
+      try {
+        const response = await createRooms(detail.roomId);
+        console.log(response);
         toast.success("Room created Successfully !!");
-        
+
         setCurrentUser(detail.userName);
         setRoomId(response.roomId);
         setConnected(true);
-        
-        router.push('/chat');
 
-      }catch (e) {
-        console.log(e)
-        if(e.status == 400){
-            toast.error("Room already exists !!");
-        }else{
-            toast.error("Error creating room !!");
+        router.push("/chat");
+      } catch (e) {
+        console.log(e);
+        if (e.status == 400) {
+          toast.error("Room already exists !!");
+        } else {
+          toast.error("Error creating room !!");
         }
       }
     }

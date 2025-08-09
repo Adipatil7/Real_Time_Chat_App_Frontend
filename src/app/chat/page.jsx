@@ -1,10 +1,20 @@
 "use client";
 
-import { useRef, useState } from "react";
+import useChatContext from "@/context/ChatContext";
+import { useEffect, useRef, useState } from "react";
 import { MdAttachment, MdSend } from "react-icons/md";
 
-
 export default function Home() {
+
+  const {roomId , currentUser , connected} = useChatContext();
+
+  
+  useEffect(() => {
+    if(!connected){
+      Router.push("/");
+    }
+  } , [connected,roomId,currentUser])
+
   const [messages, setMessages] = useState([
     { content: "Hello ?", sender: "John" },
     { content: "Hi", sender: "Jane" },
@@ -14,8 +24,6 @@ export default function Home() {
   const inputRef = useRef(null);
   const chatBoxRef = useRef(null);
   const [stompClient, setStompClient] = useState(null);
-  const [roomId, setRoomId] = useState("");
-  const [currentUser] = useState("Aditya")
   return (
     <div className="">
       {/* This is Header */}
