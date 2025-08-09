@@ -1,6 +1,7 @@
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ChatProvider } from "@/context/ChatContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,9 +21,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
-      <body className = "h-screen bg-gray-200 text-gray-800 dark:bg-gray-950 dark:text-gray-50" >
-        {children}
-        <Toaster position="top-right" />
+      <body className="h-screen bg-gray-200 text-gray-800 dark:bg-gray-950 dark:text-gray-50">
+        <ChatProvider>
+          {children}
+          <Toaster position="top-center" />
+        </ChatProvider>
       </body>
     </html>
   );

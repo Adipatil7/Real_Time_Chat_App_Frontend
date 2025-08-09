@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { MdAttachment, MdSend } from "react-icons/md";
 
+
 export default function Home() {
   const [messages, setMessages] = useState([
     { content: "Hello ?", sender: "John" },
@@ -45,8 +46,8 @@ export default function Home() {
             <div className={`my-2 ${message.sender === currentUser ? "bg-cyan-500":"bg-purple-500"} rounded p-2 max-w-xs`}>
               <div className="flex flex-row">
                 <img
-                  className="h-10 w-10 gap-2"
-                  src={"https://avatar.iran.liara.run/public/48"}
+                  className="h-6 w-6 gap-3"
+                  src={"/images/person.avif"}
                   alt=""
                 />
                 <div className="flex flex-col gap-1">
